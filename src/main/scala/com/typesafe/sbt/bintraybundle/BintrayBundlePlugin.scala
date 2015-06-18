@@ -11,8 +11,13 @@ object BintrayBundle extends sbt.AutoPlugin {
   override def `requires` = SbtBundle && BintrayPlugin
   override def trigger = AllRequirements
 
+  object autoImport extends BintrayBundleKeys
+
+  import autoImport._
+  
   override def buildSettings: Seq[Setting[_]] = Seq(
-    bintrayReleaseOnPublish := false
+    bintrayReleaseOnPublish := false,
+    bintrayBundleOwner := organization.value
   )
 
   override def projectSettings: Seq[Setting[_]] = Seq(
@@ -20,9 +25,10 @@ object BintrayBundle extends sbt.AutoPlugin {
     bintrayRepository := "bundle",
     publishMavenStyle := false,
     publishArtifact in Compile := false,
+    bintrayBundleName := normalizedName.value,
     publish in Bundle := {
-      val bundleOwner = organization.value
-      val bundleName = normalizedName.value
+      val bundleOwner = bintrayBundleOwner.value
+      val bundleName = bintrayBundleName.value
       val repo = bintrayRepo.value
       val b = (dist in Bundle).value
       val ver = b.getName.split("-").toList.takeRight(2).mkString("-").replaceAll("""\.zip$""", "")
