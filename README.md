@@ -35,8 +35,12 @@ lazy val bundle1 = (project in file(".")).
 Usage
 -----
 
-To publish your Conductr bundle to Bintray,
+Go to Bintray.com, and create the package with your bundle name, such as `bundle1`.
+
+To stage your Conductr bundle to Bintray,
 
 ```scala
 > bundle:publish
 ```
+
+Go back to Bintray.com, and hit the publish button to release it.

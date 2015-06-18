@@ -16,5 +16,8 @@ lazy val root = (project in file(".")).
     licenses := Seq("Apache-2.0" -> url("http://www.apache.org/licenses/LICENSE-2.0")),
     scalacOptions := Seq("-deprecation", "-unchecked"),
     addSbtPlugin(sbtbundle),
-    addSbtPlugin(bintraysbt)
+    addSbtPlugin(bintraysbt),
+    bintrayOrganization := Some("sbt"),
+    bintrayRepository := "sbt-plugin-releases",
+    bintrayReleaseOnPublish := false
   )
