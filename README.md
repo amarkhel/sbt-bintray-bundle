@@ -17,25 +17,26 @@ addSbtPlugin("com.typesafe.sbt" % "sbt-bintray-bundle" % "0.1.0")
 Declaring the native packager or any of its other plugins should be sufficient. For example, in your build.sbt file:
 
 ```scala
-lazy val bundle1 = (project in file(".")).
-  enablePlugins(ConductRPlugin, JavaAppPackaging).
-  settings(
-    // commonSettings,
-    // bundleSettings,
-    name := "bundle1",
-    // Naming convention for a bundle is owner/name, like a Github repo.
-    bintrayBundleOwner := "orgname",
-    // Optionally, if you want to publish to an org repo
-    bintrayOrganization := Some("orgname"),
-    // Optionally, if you want to change the name of the repo
-    bintrayRepository := "bundle"
-  )
+// bundleSettings,
+name := "bundle1"
+
+// A license is required for bintray packages
+licenses := Seq("Apache-2.0" -> url("http://www.apache.org/licenses/LICENSE-2.0"))
+
+inConfig(Bundle)(Seq(
+  // A version control system url is required for bintray packages
+  bintrayVcsUrl := Some("https://github.com/sbt/sbt-bintray-bundle"),
+  // Optionally, if you want to publish to an org repo other than your own
+  bintrayOrganization := Some("orgname")
+  // Optionally, if you want to change the name of the repo ("bundle" is the default)
+  bintrayRepository := "test-bundle-repo",
+))
+
+lazy val root = (project in file(".")).enablePlugins(JavaAppPackaging)
 ```
 
 Usage
 -----
-
-Go to Bintray.com, and create the package with your bundle name, such as `bundle1`.
 
 To stage your Conductr bundle to Bintray,
 
@@ -43,4 +44,13 @@ To stage your Conductr bundle to Bintray,
 > bundle:publish
 ```
 
-Go back to Bintray.com, and hit the publish button to release it.
+Go back to Bintray.com, and hit the publish button to release it (set the `bintrayReleaseOnPublish` to true
+if you'd prefer to release immediately).
+
+Most [Bintray plugin] keys are honored and can be scoped specifically for bundles e.g.: `bintrayReleaseOnPublish in Bundle`
+means that the setting will be applied for the specific bundle.
+
+In addition, where a project has multiple bundle types and/or bundle configuration then bintray settings can be applied
+distinctly. Check out the sbt-bintray-bundle-tester sub project for an example.
+
+&copy; Typesafe Inc., 2015
