@@ -1,6 +1,8 @@
 sbt-bintray-bundle
 ==================
 
+[![Build Status](https://api.travis-ci.org/sbt/sbt-bintray-bundle.png?branch=master)](https://travis-ci.org/sbt/sbt-bintray-bundle)
+
 sbt-bintray-bundle = sbt-bundle + bintray-sbt
 
 This is an sbt plugin to publish your Conductr bundle to Bintray.
