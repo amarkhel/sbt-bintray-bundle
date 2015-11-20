@@ -11,7 +11,7 @@ Setup
 In `project/bintraybundle.sbt`:
 
 ```scala
-addSbtPlugin("com.typesafe.sbt" % "sbt-bintray-bundle" % "0.1.0")
+addSbtPlugin("com.typesafe.sbt" % "sbt-bintray-bundle" % "1.0.0")
 ```
 
 Declaring the native packager or any of its other plugins should be sufficient. For example, in your build.sbt file:
