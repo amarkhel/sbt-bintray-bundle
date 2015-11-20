@@ -5,7 +5,7 @@ sbt-bintray-bundle
 
 sbt-bintray-bundle = sbt-bundle + bintray-sbt
 
-This is an sbt plugin to publish your Conductr bundle to Bintray.
+This is an sbt plugin to publish your [ConductR](http://conductr.typesafe.com/) bundle to Bintray.
 
 Setup
 -----
@@ -49,7 +49,7 @@ To stage your Conductr bundle to Bintray,
 Go back to Bintray.com, and hit the publish button to release it (set the `bintrayReleaseOnPublish` to true
 if you'd prefer to release immediately).
 
-Most [Bintray plugin] keys are honored and can be scoped specifically for bundles e.g.: `bintrayReleaseOnPublish in Bundle`
+Most [Bintray plugin](https://github.com/softprops/bintray-sbt#bintray-sbt) keys are honored and can be scoped specifically for bundles e.g.: `bintrayReleaseOnPublish in Bundle`
 means that the setting will be applied for the specific bundle.
 
 In addition, where a project has multiple bundle types and/or bundle configuration then bintray settings can be applied
