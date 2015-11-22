@@ -61,11 +61,16 @@ object BintrayBundle extends sbt.AutoPlugin {
           licenses,
           (BintrayKeys.bintrayPackageLabels in config).value)
 
-        val isRelease = (BintrayKeys.bintrayReleaseOnPublish in Bundle).value
-        val path = s"""/${repo.owner}/$packageName/$version/$packageName-$version.zip?publish=${if (isRelease) "1" else "0"}"""
+        val path = s"/${repo.owner}/$packageName/$version/$packageName-$version.zip"
+        val desc = s"${repo.owner}/$packageName@$version"
 
-        log.info(s"""${if (isRelease) "Publishing" else "Staging"} to ${repo.owner}/$packageName@$version""")
+        log.info(s"Staging $desc")
         repo.upload(packageName, version, path, bundleDist, log)
+
+        if ((BintrayKeys.bintrayReleaseOnPublish in config).value) {
+          log.info(s"Publishing $desc")
+          repo.release(packageName, version, log)
+        }
       }
     ))
 
