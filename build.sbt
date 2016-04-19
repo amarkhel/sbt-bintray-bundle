@@ -22,8 +22,8 @@ ScalariformKeys.preferences := ScalariformKeys.preferences.value
   .setPreference(DoubleIndentClassDeclaration, true)
   .setPreference(PreserveDanglingCloseParenthesis, true)
 
-addSbtPlugin("me.lessis"        % "bintray-sbt" % "0.3.0")
-addSbtPlugin("com.typesafe.sbt" % "sbt-bundle"  % "1.2.1")
+addSbtPlugin("me.lessis"              % "bintray-sbt"  % "0.3.0")
+addSbtPlugin("com.lightbend.conductr" % "sbt-conductr" % "2.0.1")
 
 releaseSettings
 ReleaseKeys.versionBump := sbtrelease.Version.Bump.Minor
