@@ -2,8 +2,8 @@ package com.typesafe.sbt.bintraybundle
 
 import bintry.Licenses
 import sbt._
-import com.typesafe.sbt.bundle.SbtBundle, SbtBundle.autoImport._
-import com.typesafe.sbt.packager.universal.UniversalPlugin, UniversalPlugin.autoImport._
+import com.lightbend.conductr.sbt.BundlePlugin
+import com.typesafe.sbt.packager.universal.UniversalPlugin
 import bintray._
 
 /**
@@ -12,7 +12,10 @@ import bintray._
  */
 object BintrayBundle extends sbt.AutoPlugin {
 
-  override def `requires` = SbtBundle && BintrayPlugin
+  import UniversalPlugin.autoImport._
+  import BundlePlugin.autoImport._
+
+  override def `requires` = BundlePlugin && BintrayPlugin
   override def trigger = AllRequirements
 
   override def projectSettings: Seq[Setting[_]] =
