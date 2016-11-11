@@ -19,18 +19,22 @@ object BintrayBundle extends sbt.AutoPlugin {
   override def trigger = AllRequirements
 
   override def projectSettings: Seq[Setting[_]] =
-    Seq(
-      BintrayKeys.bintrayReleaseOnPublish in Bundle := false,
-      BintrayKeys.bintrayRepository in Bundle := "bundle",
-      Keys.publishMavenStyle in Bundle := false
-    ) ++ settings(Bundle)
+    settings(Bundle) ++ settings(BundleConfiguration, isBundleConfiguration = true)
 
   /**
    * Declare bintray bundle related settings for a given bundle configuration.
    */
-  def settings(config: Configuration): Seq[Setting[_]] =
+  def settings(config: Configuration, isBundleConfiguration: Boolean = false): Seq[Setting[_]] =
     inConfig(config)(Seq(
-      BintrayKeys.bintrayPackage := (Keys.normalizedName in config).value,
+      BintrayKeys.bintrayReleaseOnPublish in config := false,
+      BintrayKeys.bintrayRepository := "bundle",
+      Keys.publishMavenStyle := false,
+      BintrayKeys.bintrayPackage := {
+        if (isBundleConfiguration)
+          (BundleKeys.configurationName in config).value
+        else
+          (Keys.normalizedName in config).value
+      },
       Keys.publish := {
         val log = Keys.streams.value.log
 
@@ -51,41 +55,37 @@ object BintrayBundle extends sbt.AutoPlugin {
         }
 
         val bundleDist = (dist in config).value
-        val version = bundleDist.getName.split("-").toList.takeRight(2).mkString("-").replaceAll("""\.zip$""", "")
-        val compatVersion = version.takeWhile(_ != '-')
+        val compatVersion = (BundleKeys.compatibilityVersion in config).value.dropWhile(_ == 'v')
+        val digest = bundleDist.getName.split("-").toList.takeRight(1).mkString("-").replaceAll("""\.zip$""", "")
+        val digestVersionStr = s"v$compatVersion-$digest"
         val attributes = (BintrayKeys.bintrayPackageAttributes in config).value ++
-          Map(s"latest-" + compatVersion -> Seq(bintry.Attr.Version(version)))
+          Map(s"latest-v" + compatVersion -> Seq(bintry.Attr.Version(digestVersionStr)))
 
+        val path = s"/${repo.owner}/$packageName/$digestVersionStr/$packageName-$digestVersionStr.zip"
+        val desc = s"${repo.owner}/$packageName@$digestVersionStr"
+
+        log.info(s"Checking package for $desc")
         repo.ensurePackage(
-          (BintrayKeys.bintrayPackage in config).value,
+          packageName,
           attributes,
           (Keys.description in config).value,
           vcs,
           licenses,
           (BintrayKeys.bintrayPackageLabels in config).value)
 
-        val path = s"/${repo.owner}/$packageName/$version/$packageName-$version.zip"
-        val desc = s"${repo.owner}/$packageName@$version"
-
         log.info(s"Staging $desc")
-        repo.upload(packageName, version, path, bundleDist, log)
+        repo.upload(packageName, digestVersionStr, path, bundleDist, log)
 
         if ((BintrayKeys.bintrayReleaseOnPublish in config).value) {
           log.info(s"Publishing $desc")
-          repo.release(packageName, version, log)
+          repo.release(packageName, digestVersionStr, log)
         }
       }
     ))
 
-  // FIXME: Imported from the bintray plugin due to it being private
   private def ensureLicenses(licenses: Seq[(String, URL)], omit: Boolean): Unit =
-    if (!omit) {
-      val acceptable = Licenses.Names.toSeq.sorted.mkString(", ")
-      if (licenses.isEmpty)
-        sys.error(s"you must define at least one license for this project. Please choose one or more of\n $acceptable")
-      else if (!licenses.forall { case (name, _) => Licenses.Names.contains(name) })
-        sys.error(s"One or more of the defined licenses were not among the following allowed licenses\n $acceptable")
-    }
+    if (!omit && licenses.isEmpty)
+      sys.error(s"you must define at least one license for this project.")
 
   // FIXME: Imported from the bintray plugin due to it being private
   private def ensuredCredentials(credsFile: File, prompt: Boolean = true): Option[BintrayCredentials] =
