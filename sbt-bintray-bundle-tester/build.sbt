@@ -16,7 +16,7 @@ BundleKeys.roles := Set("web-server")
 BundleKeys.configurationName := "frontend"
 
 lazy val BackendRegion = config("backend-region").extend(Bundle)
-SbtBundle.bundleSettings(BackendRegion)
+BundlePlugin.bundleSettings(BackendRegion)
 inConfig(BackendRegion)(Seq(
   normalizedName := "simple-test-backend"
 ))

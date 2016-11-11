@@ -55,4 +55,6 @@ means that the setting will be applied for the specific bundle.
 In addition, where a project has multiple bundle types and/or bundle configuration then bintray settings can be applied
 distinctly. Check out the sbt-bintray-bundle-tester sub project for an example.
 
-&copy; Typesafe Inc., 2015
+> Note that bundle configurations can also be published: `configuration:publish`. *Take care when publishing configurations* that contain sensitive data e.g. passwords and secrets. Ensure that the target repository on Bintray is protected by credentials. Note also that the configuration repo/package on Bintray will not default to the same repo/package as the bundle. Configuration is regarded as sensitive and so you must consider carefully where it lies.
+
+&copy; Lightbend Inc., 2015

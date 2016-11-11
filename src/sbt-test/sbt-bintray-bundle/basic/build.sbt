@@ -14,7 +14,7 @@ BundleKeys.memory := 64.MiB
 BundleKeys.diskSpace := 10.MB
 BundleKeys.roles := Set("web-server")
 
-BundleKeys.configurationName := "frontend"
+BundleKeys.configurationName := "frontend-config"
 
 inConfig(Bundle)(Seq(
   bintrayVcsUrl := Some("https://github.com/sbt/sbt-bintray-bundle"),
@@ -26,6 +26,7 @@ val checkSettings = taskKey[Unit]("")
 
 checkSettings := {
   (bintrayPackage in Bundle).value shouldBe "simple-test-frontend"
+  (bintrayPackage in BundleConfiguration).value shouldBe "frontend-config"
 }
 
 lazy val root = (project in file("."))
