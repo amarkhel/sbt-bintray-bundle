@@ -5,7 +5,7 @@ sbt-bintray-bundle
 
 sbt-bintray-bundle = sbt-bundle + bintray-sbt
 
-This is an sbt plugin to publish your [ConductR](http://conductr.typesafe.com/) bundle to Bintray.
+This is an sbt plugin to publish your [ConductR](http://conductr.typesafe.com/) bundle and its configuration to Bintray.
 
 Setup
 -----
