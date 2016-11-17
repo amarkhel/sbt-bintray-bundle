@@ -27,7 +27,12 @@ object BintrayBundle extends sbt.AutoPlugin {
   def settings(config: Configuration, isBundleConfiguration: Boolean = false): Seq[Setting[_]] =
     inConfig(config)(Seq(
       BintrayKeys.bintrayReleaseOnPublish in config := false,
-      BintrayKeys.bintrayRepository := "bundle",
+      BintrayKeys.bintrayRepository := {
+        if (isBundleConfiguration)
+          "bundle-configuration"
+        else
+          "bundle"
+      },
       Keys.publishMavenStyle := false,
       BintrayKeys.bintrayPackage := {
         if (isBundleConfiguration)
