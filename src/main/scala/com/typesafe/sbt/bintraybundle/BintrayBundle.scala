@@ -60,11 +60,12 @@ object BintrayBundle extends sbt.AutoPlugin {
         }
 
         val bundleDist = (dist in config).value
-        val compatVersion = (BundleKeys.compatibilityVersion in config).value.dropWhile(_ == 'v')
+        val compatVersion = "v" + (BundleKeys.compatibilityVersion in config).value.dropWhile(_ == 'v')
+        val tag = (BundleKeys.tags in config).value.headOption.getOrElse(compatVersion)
         val digest = bundleDist.getName.split("-").toList.takeRight(1).mkString("-").replaceAll("""\.zip$""", "")
-        val digestVersionStr = s"v$compatVersion-$digest"
+        val digestVersionStr = tag + "-" + digest
         val attributes = (BintrayKeys.bintrayPackageAttributes in config).value ++
-          Map(s"latest-v" + compatVersion -> Seq(bintry.Attr.Version(digestVersionStr)))
+          Map(s"latest-" + tag -> Seq(bintry.Attr.Version(digestVersionStr)))
 
         val path = s"/${repo.owner}/$packageName/$digestVersionStr/$packageName-$digestVersionStr.zip"
         val desc = s"${repo.owner}/$packageName@$digestVersionStr"
