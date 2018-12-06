@@ -2,7 +2,7 @@ import scalariform.formatter.preferences.{PreserveDanglingCloseParenthesis, Doub
 
 sbtPlugin := true
 
-organization := "com.typesafe.sbt"
+organization := "com.amarkhel"
 name := "sbt-bintray-bundle"
 description := "sbt plugin to publish a ConductR bundle to Bintray."
 
