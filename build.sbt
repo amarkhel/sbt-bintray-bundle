@@ -33,7 +33,7 @@ publishMavenStyle := false
 bintrayRepository := "sbt-plugins"
 bintrayOrganization := Some("sbt")
 bintrayRepository := "sbt-plugin-releases"
-bintrayReleaseOnPublish := false
+bintrayReleaseOnPublish := true
 
 scriptedSettings
 scriptedLaunchOpts <+= version apply { v => s"-Dproject.version=$v" }
